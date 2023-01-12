@@ -1,45 +1,21 @@
-const canvas = document.createElement('canvas');
 
-canvas.id = "myCanvas";
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-canvas.style.top = '0px';
-canvas.style.position = "absolute";
-canvas.style.zIndex = 999;
+var s = function(sketch) {
+  sketch.setup = function() {
+    document.body.style['userSelect'] = 'none';
+    let h = document.body.clientHeight;
+    let c = sketch.createCanvas(sketch.windowWidth, sketch.windowHeight);
+    c.position(0, 0);
+    c.style('pointer-events', 'none');
+    sketch.clear();
+  };
 
-const body = document.body;
-body.appendChild(canvas);
+  sketch.draw = function() {
+    sketch.stroke(0);
+    sketch.strokeWeight(4);
+    if (sketch.mouseIsPressed) {
+      sketch.line(sketch.mouseX, sketch.mouseY, sketch.pmouseX, sketch.pmouseY);
+    }
+  };
+};
 
-const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
-
-let isDrawing = false;
-let lastX = 0;
-let lastY = 0;
-
-canvas.addEventListener('mousedown', (event) => {
-  console.log("mousedown");
-  isDrawing = true;
-  lastX = event.offsetX;
-  lastY = event.offsetY;
-});
-
-canvas.addEventListener('mousemove', (event) => {
-  if (!isDrawing) return;
-  
-  const x = event.offsetX;
-  const y = event.offsetY;
-
-  ctx.strokeStyle = 'red';
-  ctx.beginPath();
-  ctx.moveTo(lastX, lastY);
-  ctx.lineTo(x, y);
-  ctx.stroke();
-
-  lastX = x;
-  lastY = y;
-});
-
-canvas.addEventListener('mouseup', () => {
-  isDrawing = false;
-});
+var myp5 = new p5(s);
